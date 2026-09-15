@@ -4,13 +4,173 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rangdhonu Live TV</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #050510;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .header {
+      padding: 20px;
+      text-align: center;
+      background: #0b0b1c;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: bold;
+      color: #8b7cff;
+    }
+
+    .search {
+      margin-top: 18px;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #383060;
+      border-radius: 14px;
+      background: #151326;
+      color: white;
+      font-size: 16px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 15px;
+    }
+
+    .category {
+      white-space: nowrap;
+      padding: 10px 16px;
+      border-radius: 20px;
+      background: #17152b;
+      border: 1px solid #39326b;
+    }
+
+    .player {
+      margin: 10px 15px;
+      height: 210px;
+      border-radius: 18px;
+      background: #11111c;
+      border: 1px solid #403b75;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+    }
+
+    .section {
+      padding: 15px;
+    }
+
+    .section h2 {
+      margin-bottom: 15px;
+    }
+
+    .channels {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .channel {
+      padding: 15px;
+      border-radius: 16px;
+      background: #111020;
+      border: 1px solid #29254d;
+    }
+
+    .channel-name {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: #321d5c;
+      font-size: 11px;
+    }
+
+    .bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 14px;
+      background: #0b0b16;
+      text-align: center;
+      border-top: 1px solid #252040;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h1>Rangdhonu Live TV</h1>
+  <div class="header">
+    <div class="logo">🌈 Rangdhonu Live TV</div>
 
-  <p>আমাদের Live TV website তৈরি হচ্ছে।</p>
+    <input class="search" type="text" placeholder="🔍 Channel Search">
+  </div>
+
+  <div class="categories">
+    <div class="category">সব</div>
+    <div class="category">Bangla</div>
+    <div class="category">News</div>
+    <div class="category">Sports</div>
+    <div class="category">Movies</div>
+    <div class="category">Music</div>
+  </div>
+
+  <div class="player">
+    📺 Live Player
+  </div>
+
+  <div class="section">
+    <h2>Live Channels</h2>
+
+    <div class="channels">
+
+      <div class="channel">
+        📺
+        <div class="channel-name">Channel 1</div>
+        <span class="badge">LIVE</span>
+      </div>
+
+      <div class="channel">
+        📺
+        <div class="channel-name">Channel 2</div>
+        <span class="badge">HD</span>
+      </div>
+
+      <div class="channel">
+        📺
+        <div class="channel-name">Channel 3</div>
+        <span class="badge">LIVE</span>
+      </div>
+
+      <div class="channel">
+        📺
+        <div class="channel-name">Channel 4</div>
+        <span class="badge">HD</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom">
+    🏠 Home &nbsp;&nbsp; 📺 Live TV &nbsp;&nbsp; ⚙️ Admin
+  </div>
 
 </body>
 </html>
