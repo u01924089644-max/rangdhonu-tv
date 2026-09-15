@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Rangdhonu Live TV</title>
 
   <style>
@@ -10,34 +11,50 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
+      padding-bottom: 80px;
       background: #050510;
       color: white;
       font-family: Arial, sans-serif;
     }
 
     .header {
-      padding: 20px;
+      padding: 22px 15px;
       text-align: center;
-      background: #0b0b1c;
+      background: linear-gradient(180deg, #0d0b20, #080714);
     }
 
     .logo {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: bold;
-      color: #8b7cff;
+      color: #9b8cff;
+    }
+
+    .subtitle {
+      margin-top: 7px;
+      color: #999;
+      font-size: 13px;
     }
 
     .search {
       margin-top: 18px;
       width: 100%;
-      padding: 14px;
+      padding: 15px;
       border: 1px solid #383060;
       border-radius: 14px;
       background: #151326;
       color: white;
       font-size: 16px;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: #8b7cff;
     }
 
     .categories {
@@ -45,34 +62,77 @@
       gap: 10px;
       overflow-x: auto;
       padding: 15px;
+      background: #070711;
+      scrollbar-width: none;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
     }
 
     .category {
       white-space: nowrap;
-      padding: 10px 16px;
+      padding: 10px 17px;
       border-radius: 20px;
       background: #17152b;
       border: 1px solid #39326b;
+      color: white;
+      cursor: pointer;
+    }
+
+    .category.active {
+      background: #6d45d9;
+      border-color: #987cff;
+    }
+
+    .player-box {
+      padding: 10px 15px 0;
     }
 
     .player {
-      margin: 10px 15px;
-      height: 210px;
+      width: 100%;
+      height: 220px;
       border-radius: 18px;
       background: #11111c;
       border: 1px solid #403b75;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: none;
+    }
+
+    .player-message {
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #888;
+      text-align: center;
+      padding: 20px;
+      color: #999;
+      font-size: 16px;
+    }
+
+    .now-playing {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #111020;
+      border: 1px solid #29254d;
+      color: #ddd;
     }
 
     .section {
-      padding: 15px;
+      padding: 18px 15px;
     }
 
     .section h2 {
-      margin-bottom: 15px;
+      margin: 0 0 15px;
+      font-size: 24px;
     }
 
     .channels {
@@ -86,27 +146,564 @@
       border-radius: 16px;
       background: #111020;
       border: 1px solid #29254d;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .channel:hover {
+      transform: translateY(-2px);
+      border-color: #7664d8;
+    }
+
+    .channel-icon {
+      font-size: 28px;
     }
 
     .channel-name {
       font-weight: bold;
       margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .country {
+      margin-top: 5px;
+      color: #999;
+      font-size: 12px;
     }
 
     .badge {
       display: inline-block;
-      margin-top: 8px;
-      padding: 4px 8px;
+      margin-top: 9px;
+      padding: 5px 9px;
       border-radius: 8px;
       background: #321d5c;
+      color: #ddd;
       font-size: 11px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #888;
+      display: none;
     }
 
     .bottom {
       position: fixed;
       bottom: 0;
       left: 0;
-      right: 0;
+      width: 100%;
+      height: 68px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: #0a0a16;
+      border-top: 1px solid #24213d;
+      z-index: 100;
+    }
+
+    .bottom div {
+      color: #ddd;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .bottom span {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 500px) {
+      .channels {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .channel {
+        padding: 13px;
+      }
+
+      .logo {
+        font-size: 25px;
+      }
+
+      .player {
+        height: 205px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <div class="logo">
+      🌈 Rangdhonu Live TV
+    </div>
+
+    <div class="subtitle">
+      Bangladesh & India Live Television
+    </div>
+
+    <input
+      type="text"
+      id="search"
+      class="search"
+      placeholder="🔍 Channel Search"
+      autocomplete="off"
+    >
+
+  </header>
+
+
+  <!-- CATEGORIES -->
+  <div class="categories">
+
+    <button class="category active" onclick="filterCategory('all', this)">
+      সব
+    </button>
+
+    <button class="category" onclick="filterCategory('bangladesh', this)">
+      🇧🇩 Bangladesh
+    </button>
+
+    <button class="category" onclick="filterCategory('india', this)">
+      🇮🇳 India
+    </button>
+
+    <button class="category" onclick="filterCategory('news', this)">
+      📰 News
+    </button>
+
+    <button class="category" onclick="filterCategory('sports', this)">
+      ⚽ Sports
+    </button>
+
+  </div>
+
+
+  <!-- LIVE PLAYER -->
+  <div class="player-box">
+
+    <div class="player">
+
+      <div id="playerMessage" class="player-message">
+        📺 একটি Channel নির্বাচন করুন
+      </div>
+
+      <iframe
+        id="player"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+
+    </div>
+
+    <div id="nowPlaying" class="now-playing">
+      📺 এখন কোনো Channel নির্বাচন করা হয়নি
+    </div>
+
+  </div>
+
+
+  <!-- CHANNELS -->
+  <section class="section">
+
+    <h2>📡 Live Channels</h2>
+
+    <div id="channels" class="channels">
+
+
+      <!-- BANGLADESH -->
+
+      <div
+        class="channel"
+        data-name="Jamuna TV"
+        data-country="bangladesh"
+        data-category="news"
+        onclick="playChannel('Jamuna TV', 'UCN6sm8iHiPd0cnoUardDAnw')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">Jamuna TV</div>
+        <div class="country">🇧🇩 Bangladesh</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="Somoy TV"
+        data-country="bangladesh"
+        data-category="news"
+        onclick="playChannel('Somoy TV', 'UCxHoBXkY88Tb8z1Ssj6CWsQ')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">Somoy TV</div>
+        <div class="country">🇧🇩 Bangladesh</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="Channel 24"
+        data-country="bangladesh"
+        data-category="news"
+        onclick="playChannel('Channel 24', 'UCHLqIOMPk20w-6cFgkA90jw')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">Channel 24</div>
+        <div class="country">🇧🇩 Bangladesh</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="NTV"
+        data-country="bangladesh"
+        data-category="news"
+        onclick="playChannel('NTV', 'UCUDQdVsKssximyFwg4IxnOQ')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">NTV</div>
+        <div class="country">🇧🇩 Bangladesh</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="Independent TV"
+        data-country="bangladesh"
+        data-category="news"
+        onclick="playChannel('Independent TV', 'UCATUkaOHwO9EP_W87zCiPbA')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">Independent TV</div>
+        <div class="country">🇧🇩 Bangladesh</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="DBC News"
+        data-country="bangladesh"
+        data-category="news"
+        onclick="playChannel('DBC News', 'UCUvXoiDEKI8VZJrr58g4VAw')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">DBC News</div>
+        <div class="country">🇧🇩 Bangladesh</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="Ekattor TV"
+        data-country="bangladesh"
+        data-category="news"
+        onclick="playVideo('Ekattor TV', 'tAidYvp9xLk')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">Ekattor TV</div>
+        <div class="country">🇧🇩 Bangladesh</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <!-- INDIA -->
+
+      <div
+        class="channel"
+        data-name="DD News"
+        data-country="india"
+        data-category="news"
+        onclick="playChannel('DD News', 'UCYPvAwZP8pZhSMW8D6uB8YA')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">DD News</div>
+        <div class="country">🇮🇳 India</div>
+        <span class="badge">LIVE</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="DD National"
+        data-country="india"
+        data-category="all"
+        onclick="openOfficial('DD National', 'https://www.youtube.com/@Doordarshannational')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">DD National</div>
+        <div class="country">🇮🇳 India</div>
+        <span class="badge">OFFICIAL</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="DD Sports"
+        data-country="india"
+        data-category="sports"
+        onclick="openOfficial('DD Sports', 'https://www.youtube.com/@PrasarBharatiSports')">
+
+        <div class="channel-icon">⚽</div>
+        <div class="channel-name">DD Sports</div>
+        <div class="country">🇮🇳 India</div>
+        <span class="badge">OFFICIAL</span>
+
+      </div>
+
+
+      <div
+        class="channel"
+        data-name="DD Bangla"
+        data-country="india"
+        data-category="all"
+        onclick="openOfficial('DD Bangla', 'https://www.youtube.com/@DDBangla')">
+
+        <div class="channel-icon">📺</div>
+        <div class="channel-name">DD Bangla</div>
+        <div class="country">🇮🇳 India</div>
+        <span class="badge">OFFICIAL</span>
+
+      </div>
+
+
+    </div>
+
+    <div id="empty" class="empty">
+      😕 কোনো Channel পাওয়া যায়নি
+    </div>
+
+  </section>
+
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom">
+
+    <div onclick="goHome()">
+      <span>🏠</span>
+      Home
+    </div>
+
+    <div onclick="goLive()">
+      <span>📺</span>
+      Live TV
+    </div>
+
+    <div onclick="goAdmin()">
+      <span>⚙️</span>
+      Admin
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const player = document.getElementById("player");
+    const playerMessage = document.getElementById("playerMessage");
+    const nowPlaying = document.getElementById("nowPlaying");
+
+    const search = document.getElementById("search");
+    const channels = document.querySelectorAll(".channel");
+    const empty = document.getElementById("empty");
+
+
+    // PLAY YOUTUBE CHANNEL LIVE
+    function playChannel(name, channelId) {
+
+      playerMessage.style.display = "none";
+      player.style.display = "block";
+
+      player.src =
+        "https://www.youtube.com/embed/live_stream?channel="
+        + channelId
+        + "&autoplay=1";
+
+      nowPlaying.innerHTML =
+        "🔴 এখন চলছে: <strong>"
+        + name
+        + "</strong>";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+
+    // PLAY SPECIFIC YOUTUBE VIDEO
+    function playVideo(name, videoId) {
+
+      playerMessage.style.display = "none";
+      player.style.display = "block";
+
+      player.src =
+        "https://www.youtube.com/embed/"
+        + videoId
+        + "?autoplay=1";
+
+      nowPlaying.innerHTML =
+        "🔴 এখন চলছে: <strong>"
+        + name
+        + "</strong>";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+
+    // OPEN OFFICIAL CHANNEL
+    function openOfficial(name, url) {
+
+      nowPlaying.innerHTML =
+        "📺 <strong>"
+        + name
+        + "</strong> — Official live page খুলছে...";
+
+      window.open(url, "_blank");
+    }
+
+
+    // SEARCH
+    search.addEventListener("input", function () {
+
+      const value = search.value.toLowerCase().trim();
+
+      let found = 0;
+
+      channels.forEach(function(channel) {
+
+        const name =
+          channel.dataset.name.toLowerCase();
+
+        const country =
+          channel.dataset.country.toLowerCase();
+
+        if (
+          name.includes(value) ||
+          country.includes(value)
+        ) {
+
+          channel.style.display = "block";
+          found++;
+
+        } else {
+
+          channel.style.display = "none";
+
+        }
+
+      });
+
+      empty.style.display =
+        found === 0 ? "block" : "none";
+
+    });
+
+
+    // CATEGORY FILTER
+    function filterCategory(category, button) {
+
+      document
+        .querySelectorAll(".category")
+        .forEach(function(btn) {
+
+          btn.classList.remove("active");
+
+        });
+
+      button.classList.add("active");
+
+      let found = 0;
+
+      channels.forEach(function(channel) {
+
+        const country =
+          channel.dataset.country;
+
+        const cat =
+          channel.dataset.category;
+
+        if (
+          category === "all" ||
+          category === country ||
+          category === cat
+        ) {
+
+          channel.style.display = "block";
+          found++;
+
+        } else {
+
+          channel.style.display = "none";
+
+        }
+
+      });
+
+      empty.style.display =
+        found === 0 ? "block" : "none";
+
+    }
+
+
+    // HOME
+    function goHome() {
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    // LIVE TV
+    function goLive() {
+
+      document
+        .querySelector(".section")
+        .scrollIntoView({
+          behavior: "smooth"
+        });
+
+    }
+
+
+    // ADMIN
+    function goAdmin() {
+
+      alert(
+        "Admin Panel শীঘ্রই যোগ করা হবে।"
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>      right: 0;
       padding: 14px;
       background: #0b0b16;
       text-align: center;
