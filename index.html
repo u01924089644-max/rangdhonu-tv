@@ -1,112 +1,265 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rangdhonu Live TV</title>
 
-  <title>Rangdhonu Live TV</title>
+<style>
+*{box-sizing:border-box}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body{
+  margin:0;
+  padding-bottom:75px;
+  background:#050509;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
 
-    html {
-      scroll-behavior: smooth;
-    }
+.header{
+  padding:20px 15px;
+  background:linear-gradient(135deg,#100b25,#080812);
+  text-align:center;
+  position:sticky;
+  top:0;
+  z-index:50;
+}
 
-    body {
-      margin: 0;
-      padding-bottom: 80px;
-      background: #050510;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
+.logo{
+  font-size:27px;
+  font-weight:bold;
+  background:linear-gradient(90deg,#ff4fd8,#7c5cff,#00d9ff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
 
-    .header {
-      padding: 22px 15px;
-      text-align: center;
-      background: linear-gradient(180deg, #0d0b20, #080714);
-    }
+.tagline{
+  color:#999;
+  font-size:12px;
+  margin-top:5px;
+}
 
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #9b8cff;
-    }
+.search{
+  width:100%;
+  margin-top:16px;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid #302950;
+  background:#151320;
+  color:white;
+  outline:none;
+  font-size:15px;
+}
 
-    .subtitle {
-      margin-top: 7px;
-      color: #999;
-      font-size: 13px;
-    }
+.categories{
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  padding:14px;
+  background:#08080f;
+}
 
-    .search {
-      margin-top: 18px;
-      width: 100%;
-      padding: 15px;
-      border: 1px solid #383060;
-      border-radius: 14px;
-      background: #151326;
-      color: white;
-      font-size: 16px;
-      outline: none;
-    }
+.categories::-webkit-scrollbar{display:none}
 
-    .search:focus {
-      border-color: #8b7cff;
-    }
+.cat{
+  flex:none;
+  border:1px solid #302950;
+  background:#13111f;
+  color:#ddd;
+  border-radius:22px;
+  padding:9px 15px;
+  cursor:pointer;
+}
 
-    .categories {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding: 15px;
-      background: #070711;
-      scrollbar-width: none;
-    }
+.cat.active{
+  background:#704cff;
+  color:white;
+  border-color:#9278ff;
+}
 
-    .categories::-webkit-scrollbar {
-      display: none;
-    }
+.player-wrap{
+  padding:14px;
+}
 
-    .category {
-      white-space: nowrap;
-      padding: 10px 17px;
-      border-radius: 20px;
-      background: #17152b;
-      border: 1px solid #39326b;
-      color: white;
-      cursor: pointer;
-    }
+.player{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#0d0d15;
+  border:1px solid #302950;
+  border-radius:18px;
+  overflow:hidden;
+  position:relative;
+}
 
-    .category.active {
-      background: #6d45d9;
-      border-color: #987cff;
-    }
+video{
+  width:100%;
+  height:100%;
+  display:none;
+  background:#000;
+}
 
-    .player-box {
-      padding: 10px 15px 0;
-    }
+.player-start{
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:#777;
+  padding:20px;
+}
 
-    .player {
-      width: 100%;
-      height: 220px;
-      border-radius: 18px;
-      background: #11111c;
-      border: 1px solid #403b75;
-      overflow: hidden;
-      position: relative;
-    }
+.live-title{
+  margin-top:10px;
+  background:#11101b;
+  border:1px solid #29243f;
+  border-radius:12px;
+  padding:12px;
+  font-size:14px;
+}
 
-    .player iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: none;
-    }
+.live-dot{
+  color:#ff315b;
+}
 
-    .player-message {
+.section{
+  padding:5px 14px 20px;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:12px 0 15px;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:21px;
+}
+
+.count{
+  color:#888;
+  font-size:12px;
+}
+
+.channels{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.channel{
+  background:linear-gradient(145deg,#12111d,#0c0c14);
+  border:1px solid #28243e;
+  border-radius:16px;
+  padding:14px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.channel:active{
+  transform:scale(.97);
+}
+
+.channel:hover{
+  border-color:#6d55d9;
+}
+
+.logo-box{
+  width:55px;
+  height:55px;
+  border-radius:14px;
+  background:#1d1930;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:27px;
+}
+
+.channel-name{
+  margin-top:10px;
+  font-weight:bold;
+  font-size:15px;
+}
+
+.channel-country{
+  margin-top:5px;
+  color:#888;
+  font-size:11px;
+}
+
+.live-badge{
+  display:inline-block;
+  margin-top:9px;
+  padding:4px 8px;
+  border-radius:7px;
+  background:#29182a;
+  color:#ff6687;
+  font-size:10px;
+}
+
+.no-result{
+  display:none;
+  text-align:center;
+  padding:35px;
+  color:#777;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:68px;
+  background:#0b0a12;
+  border-top:1px solid #27233b;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:100;
+}
+
+.nav{
+  text-align:center;
+  color:#aaa;
+  font-size:11px;
+  cursor:pointer;
+}
+
+.nav-icon{
+  font-size:21px;
+  display:block;
+  margin-bottom:2px;
+}
+
+@media(max-width:380px){
+  .channels{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .channel{
+    padding:11px;
+  }
+
+  .logo{
+    font-size:24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="logo">🌈 Rangdhonu Live TV</div>
+
+  <div class="tagline">
+    Live Television • Bangladesh • India • International
+  </div>
+
+  <input
+    id="    .player-message {
       height: 100%;
       display: flex;
       align-items: center;
