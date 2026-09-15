@@ -3,111 +3,788 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05050d">
+
 <title>Rangdhonu Live TV</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
-body{
+html,body{
   margin:0;
-  padding-bottom:75px;
-  background:#050509;
+  padding:0;
+  background:#05050d;
   color:#fff;
   font-family:Arial,sans-serif;
 }
 
+body{
+  padding-bottom:80px;
+}
+
+/* HEADER */
+
 .header{
-  padding:20px 15px;
-  background:linear-gradient(135deg,#100b25,#080812);
+  padding:22px 15px 18px;
   text-align:center;
-  position:sticky;
-  top:0;
-  z-index:50;
+  background:linear-gradient(180deg,#130b28,#080812);
 }
 
 .logo{
-  font-size:27px;
-  font-weight:bold;
-  background:linear-gradient(90deg,#ff4fd8,#7c5cff,#00d9ff);
+  font-size:28px;
+  font-weight:800;
+  background:linear-gradient(90deg,#ff45d4,#8d5cff,#00d9ff);
   -webkit-background-clip:text;
   color:transparent;
 }
 
-.tagline{
-  color:#999;
+.subtitle{
+  margin-top:6px;
+  color:#92909e;
   font-size:12px;
-  margin-top:5px;
 }
 
 .search{
   width:100%;
-  margin-top:16px;
-  padding:14px 16px;
-  border-radius:14px;
-  border:1px solid #302950;
-  background:#151320;
+  margin-top:18px;
+  padding:15px;
+  border:1px solid #302852;
+  border-radius:15px;
+  background:#151321;
   color:white;
   outline:none;
-  font-size:15px;
+  font-size:16px;
 }
+
+/* CATEGORIES */
 
 .categories{
   display:flex;
   gap:9px;
-  overflow-x:auto;
   padding:14px;
-  background:#08080f;
+  overflow-x:auto;
+  background:#080810;
 }
 
-.categories::-webkit-scrollbar{display:none}
-
-.cat{
+.category{
   flex:none;
-  border:1px solid #302950;
-  background:#13111f;
+  border:1px solid #342d58;
+  background:#151326;
   color:#ddd;
   border-radius:22px;
-  padding:9px 15px;
-  cursor:pointer;
+  padding:10px 16px;
+  font-size:14px;
 }
 
-.cat.active{
+.category.active{
   background:#704cff;
   color:white;
-  border-color:#9278ff;
 }
 
-.player-wrap{
+/* PLAYER */
+
+.player-area{
   padding:14px;
 }
 
 .player{
   width:100%;
   aspect-ratio:16/9;
-  background:#0d0d15;
-  border:1px solid #302950;
+  background:#000;
+  border:1px solid #38305c;
   border-radius:18px;
   overflow:hidden;
   position:relative;
 }
 
-video{
+#videoPlayer{
   width:100%;
   height:100%;
   display:none;
   background:#000;
+  object-fit:contain;
 }
 
-.player-start{
+/* Fullscreen */
+
+.player:fullscreen{
+  width:100vw;
+  height:100vh;
+  border:0;
+  border-radius:0;
+  background:#000;
+}
+
+.player:fullscreen #videoPlayer{
+  width:100vw;
+  height:100vh;
+  object-fit:contain;
+}
+
+.player:-webkit-full-screen{
+  width:100vw;
+  height:100vh;
+  border:0;
+  border-radius:0;
+  background:#000;
+}
+
+.player:-webkit-full-screen #videoPlayer{
+  width:100%;
   height:100%;
+}
+
+/* CUSTOM FULLSCREEN BUTTON */
+
+.fullscreen-btn{
+  position:absolute;
+  right:12px;
+  bottom:12px;
+  z-index:5;
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:10px;
+  background:rgba(0,0,0,.75);
+  color:white;
+  font-size:22px;
+}
+
+.placeholder{
+  position:absolute;
+  inset:0;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   text-align:center;
   color:#777;
-  padding:20px;
+  font-size:16px;
+  z-index:2;
 }
 
+.now-playing{
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #292441;
+  border-radius:12px;
+  background:#11101b;
+  font-size:14px;
+}
+
+.live{
+  color:#ff365c;
+}
+
+/* CHANNELS */
+
+.section{
+  padding:10px 14px 25px;
+}
+
+.section-title{
+  font-size:23px;
+  margin:8px 0 15px;
+}
+
+.channels{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.channel{
+  padding:14px;
+  min-height:150px;
+  border-radius:17px;
+  background:linear-gradient(145deg,#141321,#0c0c14);
+  border:1px solid #292441;
+  cursor:pointer;
+}
+
+.channel:active{
+  transform:scale(.97);
+}
+
+.channel-icon{
+  font-size:28px;
+}
+
+.channel-name{
+  margin-top:10px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.channel-info{
+  margin-top:5px;
+  color:#999;
+  font-size:11px;
+}
+
+.badge{
+  display:inline-block;
+  margin-top:9px;
+  padding:5px 8px;
+  border-radius:7px;
+  background:#29172d;
+  color:#ff6688;
+  font-size:10px;
+}
+
+.no-result{
+  display:none;
+  text-align:center;
+  color:#777;
+  padding:30px;
+}
+
+/* BOTTOM */
+
+.bottom{
+  position:fixed;
+  left:0;
+  bottom:0;
+  width:100%;
+  height:70px;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  background:#0a0912;
+  border-top:1px solid #27223b;
+  z-index:20;
+}
+
+.nav{
+  text-align:center;
+  color:#aaa;
+  font-size:12px;
+}
+
+.nav-icon{
+  display:block;
+  font-size:22px;
+  margin-bottom:3px;
+}
+
+.nav.active{
+  color:#9a83ff;
+}
+
+@media(max-width:500px){
+  .logo{
+    font-size:26px;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- HEADER -->
+
+<header class="header">
+
+  <div class="logo">
+    🌈 Rangdhonu Live TV
+  </div>
+
+  <div class="subtitle">
+    Bangladesh • India • International Live Television
+  </div>
+
+  <input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="🔍 Channel Search"
+  >
+
+</header>
+
+
+<!-- CATEGORY -->
+
+<div class="categories">
+
+  <button class="category active"
+    onclick="filterCategory('All',this)">
+    সব
+  </button>
+
+  <button class="category"
+    onclick="filterCategory('Bangladesh',this)">
+    🇧🇩 Bangladesh
+  </button>
+
+  <button class="category"
+    onclick="filterCategory('India',this)">
+    🇮🇳 India
+  </button>
+
+  <button class="category"
+    onclick="filterCategory('News',this)">
+    📰 News
+  </button>
+
+  <button class="category"
+    onclick="filterCategory('Sports',this)">
+    ⚽ Sports
+  </button>
+
+  <button class="category"
+    onclick="filterCategory('Entertainment',this)">
+    🎬 Entertainment
+  </button>
+
+  <button class="category"
+    onclick="filterCategory('Music',this)">
+    🎵 Music
+  </button>
+
+</div>
+
+
+<!-- PLAYER -->
+
+<div class="player-area">
+
+  <div class="player" id="player">
+
+    <div class="placeholder" id="placeholder">
+      📺<br>
+      একটি Channel নির্বাচন করুন
+    </div>
+
+    <video
+      id="videoPlayer"
+      controls
+      playsinline
+      preload="metadata">
+    </video>
+
+    <button
+      class="fullscreen-btn"
+      onclick="fullscreenPlayer()">
+      ⛶
+    </button>
+
+  </div>
+
+  <div class="now-playing" id="nowPlaying">
+    📺 এখন কোনো Channel চলছে না
+  </div>
+
+</div>
+
+
+<!-- CHANNELS -->
+
+<section class="section">
+
+  <h2 class="section-title">
+    📡 Live Channels
+  </h2>
+
+  <div id="channels" class="channels"></div>
+
+  <div id="noResult" class="no-result">
+    😕 কোনো Channel পাওয়া যায়নি
+  </div>
+
+</section>
+
+
+<!-- BOTTOM -->
+
+<div class="bottom">
+
+  <div class="nav active" onclick="home()">
+    <span class="nav-icon">🏠</span>
+    Home
+  </div>
+
+  <div class="nav" onclick="liveTV()">
+    <span class="nav-icon">📺</span>
+    Live TV
+  </div>
+
+  <div class="nav" onclick="about()">
+    <span class="nav-icon">ℹ️</span>
+    About
+  </div>
+
+</div>
+
+
+<script>
+
+/*
+==================================================
+CHANNEL DATABASE
+==================================================
+
+stream-এর জায়গায় শুধু authorized direct
+.m3u8 / HLS stream URL বসাতে হবে।
+
+YouTube URL ব্যবহার করা যাবে না।
+==================================================
+*/
+
+const channels = [
+
+  {
+    name:"Jamuna TV",
+    country:"Bangladesh",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"Somoy TV",
+    country:"Bangladesh",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"Channel 24",
+    country:"Bangladesh",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"DBC News",
+    country:"Bangladesh",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"Ekattor TV",
+    country:"Bangladesh",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"Independent TV",
+    country:"Bangladesh",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"ATN News",
+    country:"Bangladesh",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"NTV",
+    country:"Bangladesh",
+    category:"Entertainment",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"ATN Bangla",
+    country:"Bangladesh",
+    category:"Entertainment",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"BTV",
+    country:"Bangladesh",
+    category:"Entertainment",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"T Sports",
+    country:"Bangladesh",
+    category:"Sports",
+    icon:"⚽",
+    stream:""
+  },
+
+  {
+    name:"DD News",
+    country:"India",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"DD India",
+    country:"India",
+    category:"News",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"DD National",
+    country:"India",
+    category:"Entertainment",
+    icon:"📺",
+    stream:""
+  },
+
+  {
+    name:"DD Sports",
+    country:"India",
+    category:"Sports",
+    icon:"⚽",
+    stream:""
+  }
+
+];
+
+
+const channelBox =
+  document.getElementById("channels");
+
+const search =
+  document.getElementById("search");
+
+const noResult =
+  document.getElementById("noResult");
+
+const video =
+  document.getElementById("videoPlayer");
+
+const placeholder =
+  document.getElementById("placeholder");
+
+const player =
+  document.getElementById("player");
+
+const nowPlaying =
+  document.getElementById("nowPlaying");
+
+
+let currentCategory = "All";
+
+
+/* SHOW CHANNELS */
+
+function showChannels(){
+
+  const text =
+    search.value.toLowerCase().trim();
+
+  channelBox.innerHTML = "";
+
+  let count = 0;
+
+  channels.forEach(function(ch){
+
+    const matchesSearch =
+      ch.name.toLowerCase().includes(text) ||
+      ch.country.toLowerCase().includes(text) ||
+      ch.category.toLowerCase().includes(text);
+
+    const matchesCategory =
+      currentCategory === "All" ||
+      ch.country === currentCategory ||
+      ch.category === currentCategory;
+
+    if(matchesSearch && matchesCategory){
+
+      count++;
+
+      const card =
+        document.createElement("div");
+
+      card.className = "channel";
+
+      card.innerHTML = `
+        <div class="channel-icon">
+          ${ch.icon}
+        </div>
+
+        <div class="channel-name">
+          ${ch.name}
+        </div>
+
+        <div class="channel-info">
+          ${ch.country} • ${ch.category}
+        </div>
+
+        <span class="badge">
+          ● LIVE
+        </span>
+      `;
+
+      card.onclick = function(){
+        playChannel(ch);
+      };
+
+      channelBox.appendChild(card);
+    }
+
+  });
+
+  noResult.style.display =
+    count === 0 ? "block" : "none";
+}
+
+
+/* PLAY CHANNEL */
+
+function playChannel(ch){
+
+  /*
+  YouTube iframe এখানে নেই।
+  শুধুমাত্র direct video stream গ্রহণ করা হবে।
+  */
+
+  if(!ch.stream){
+
+    nowPlaying.innerHTML =
+      "⚠️ <strong>" +
+      ch.name +
+      "</strong>-এর authorized direct stream URL এখনো যোগ করা হয়নি।";
+
+    return;
+  }
+
+  placeholder.style.display = "none";
+  video.style.display = "block";
+
+  video.pause();
+
+  video.removeAttribute("src");
+
+  video.src = ch.stream;
+
+  video.load();
+
+  video.play().catch(function(){});
+
+  nowPlaying.innerHTML =
+    '<span class="live">🔴 LIVE</span> ' +
+    '<strong>' +
+    ch.name +
+    '</strong> — ' +
+    ch.country;
+
+  player.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
+
+/* FULLSCREEN */
+
+function fullscreenPlayer(){
+
+  if(document.fullscreenElement){
+
+    document.exitFullscreen();
+
+    return;
+  }
+
+  if(player.requestFullscreen){
+
+    player.requestFullscreen();
+
+  }else if(player.webkitRequestFullscreen){
+
+    player.webkitRequestFullscreen();
+
+  }else if(video.webkitEnterFullscreen){
+
+    video.webkitEnterFullscreen();
+
+  }
+}
+
+
+/* CATEGORY */
+
+function filterCategory(category,button){
+
+  currentCategory = category;
+
+  document
+    .querySelectorAll(".category")
+    .forEach(function(btn){
+      btn.classList.remove("active");
+    });
+
+  button.classList.add("active");
+
+  showChannels();
+}
+
+
+/* SEARCH */
+
+search.addEventListener(
+  "input",
+  showChannels
+);
+
+
+/* NAVIGATION */
+
+function home(){
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+function liveTV(){
+
+  document
+    .querySelector(".section")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
+
+}
+
+function about(){
+
+  alert(
+    "🌈 Rangdhonu Live TV\n\n" +
+    "Official / authorized live streams only."
+  );
+
+}
+
+
+/* START */
+
+showChannels();
+
+</script>
+
+</body>
+</html>
 .live-title{
   margin-top:10px;
   background:#11101b;
